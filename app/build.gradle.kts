@@ -126,6 +126,9 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
+    //Kotlinx datetime
+    implementation(libs.kotlinx.datetime)
+
 
 
 
