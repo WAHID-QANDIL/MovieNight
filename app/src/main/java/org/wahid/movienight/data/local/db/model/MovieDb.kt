@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.datetime.Instant
 import org.wahid.movienight.BuildConfig
 import org.wahid.movienight.domain.model.Movie
-import java.time.Instant
 
 @Entity(
     tableName ="movie",

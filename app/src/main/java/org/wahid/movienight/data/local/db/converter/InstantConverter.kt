@@ -1,7 +1,8 @@
 package org.wahid.movienight.data.local.db.converter
 
 import androidx.room.TypeConverter
-import java.time.Instant
+import kotlinx.datetime.Instant
+
 
 class InstantConverter {
     @TypeConverter
