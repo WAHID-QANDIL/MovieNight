@@ -1,9 +1,7 @@
 package org.wahid.movienight.data.remote.model
 
-import kotlinx.datetime.Clock
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.wahid.movienight.data.local.db.model.MovieDb
 
 @Serializable
 data class MovieDto(
@@ -35,25 +33,4 @@ data class MovieDto(
     val voteAverage: Double,
     @SerialName("vote_count")
     val voteCount: Int
-) {
-    fun toDb(query: Map<String, String>): MovieDb =
-        with(this) {
-            MovieDb(
-                id = id,
-                adult = adult,
-                backdropPath = backdropPath,
-                originalLanguage = originalLanguage,
-                originalTitle = originalTitle,
-                overview = overview,
-                popularity = popularity,
-                posterPath = posterPath,
-                releaseDate = releaseDate,
-                title = title,
-                video = video,
-                voteAverage = voteAverage,
-                voteCount = voteCount,
-                updated = Clock.System.now(),
-                query = query
-            )
-        }
-}
+)

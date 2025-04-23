@@ -11,10 +11,11 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import org.wahid.movienight.data.local.db.MovieDatabase
 import org.wahid.movienight.data.remote.api_service.MovieApiService
-import org.wahid.movienight.domain.model.Movie
 import kotlinx.datetime.until
+import org.wahid.movienight.data.local.db.model.MovieDb
 import org.wahid.movienight.data.local.db.model.MovieGenreDb
 import org.wahid.movienight.data.local.db.model.RemoteKeyDb
+import org.wahid.movienight.mapper.toDatabase
 
 const val LAST_PAGE = -2
 
@@ -24,7 +25,7 @@ class RemoteMovieMediator(
     private val apiService: MovieApiService,
     private val database: MovieDatabase,
     private val cacheTimeOut: Long,
-) : RemoteMediator<Int, Movie>() {
+) : RemoteMediator<Int, MovieDb>() {
 
     private val movieDao = database.movieDao()
     private val movieGenreDao = database.movieGenreDao()
@@ -33,7 +34,7 @@ class RemoteMovieMediator(
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, Movie>,
+        state: PagingState<Int, MovieDb>,
     ): MediatorResult {
         return try {
             val loadKey = when (loadType) {
@@ -64,7 +65,7 @@ class RemoteMovieMediator(
                 )
 
                 response.results.forEach { remoteMovie ->
-                    movieDao.upsert(remoteMovie.toDb(query = query))
+                    movieDao.upsert(remoteMovie.toDatabase(query = query))
                     movieGenreDao.upsert(
                         remoteMovie.genreIds.map { genreId->
                             MovieGenreDb(

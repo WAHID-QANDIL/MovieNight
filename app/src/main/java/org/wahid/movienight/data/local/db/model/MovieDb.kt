@@ -5,8 +5,6 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.datetime.Instant
-import org.wahid.movienight.BuildConfig
-import org.wahid.movienight.domain.model.Movie
 
 @Entity(
     tableName ="movie",
@@ -49,24 +47,3 @@ data class MovieDb(
     @ColumnInfo(name = "favorite")
     val favorite: Boolean = false
 )
-{
-    fun toDomain() =
-        with(this) {
-            Movie(
-                id = id,
-                adult = adult,
-                backdropPath = BuildConfig.IMAGE_URL + backdropPath,
-                originalLanguage = originalLanguage,
-                originalTitle = originalTitle,
-                overview = overview,
-                popularity = popularity,
-                posterPath = BuildConfig.IMAGE_URL + posterPath,
-                releaseDate = releaseDate,
-                title = title,
-                video = video,
-                voteAverage = voteAverage,
-                voteCount = voteCount,
-                query = query
-            )
-        }
-}
