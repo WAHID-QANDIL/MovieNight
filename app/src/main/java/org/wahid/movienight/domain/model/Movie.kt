@@ -1,7 +1,10 @@
 package org.wahid.movienight.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
+@Parcelize
 @Serializable
 data class Movie(
     val id: Int,
@@ -18,4 +21,4 @@ data class Movie(
     val voteAverage: Double,
     val voteCount: Int,
     val query: Map<String, String>
-)
+): Parcelable

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
     id("com.google.dagger.hilt.android")
     alias(libs.plugins.androidx.room)
+    alias(libs.plugins.kotlin.parcelize)
 
 }
 
@@ -124,9 +125,10 @@ dependencies {
 
     //Hilt
     implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.android.compiler)
 
-    //Kotlinx datetime
+    //Kotlinx
     implementation(libs.kotlinx.datetime)
 
 
