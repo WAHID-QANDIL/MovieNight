@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+// For more information about custom theming visit: https://developer.android.com/develop/ui/compose/designsystems/custom
 
 @Composable
 fun MovieNightTheme(
