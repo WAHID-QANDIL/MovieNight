@@ -14,7 +14,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.wahid.movienight.R
-import org.wahid.movienight.presentation.Screen
 
 
 @Composable
