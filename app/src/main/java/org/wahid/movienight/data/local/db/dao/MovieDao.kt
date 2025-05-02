@@ -63,4 +63,11 @@ abstract class MovieDao : BaseDao<MovieDb>() {
         """
     )
     abstract fun getTrendingMovies(query: Map<String, String>): PagingSource<Int, MovieDb>
+
+    @Query(
+        """
+            SELECT * FROM movie ORDER BY vote_average ASC LIMIT 5
+        """
+    )
+    abstract fun getTrendingMovies(): Flow<List<MovieDb>>
 }

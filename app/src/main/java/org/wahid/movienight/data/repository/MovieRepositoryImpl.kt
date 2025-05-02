@@ -72,4 +72,12 @@ class MovieRepositoryImpl @Inject constructor(
     override fun isFavoriteMovie(movie: Movie): Flow<Boolean> {
         return favoriteMovieDao.isFavoriteMovie(id = movie.id)
     }
+
+    override fun getTrendingMovies(): Flow<List<Movie>> {
+        return movieDao.getTrendingMovies().map {
+            it.map {
+                it.toDomainModule()
+            }
+        }
+    }
 }
