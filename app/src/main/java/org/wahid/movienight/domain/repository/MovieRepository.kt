@@ -17,5 +17,5 @@ interface MovieRepository {
 
     fun isFavoriteMovie(movie: Movie): Flow<Boolean>
 
-    fun getTrendingMovies(): Flow<List<Movie>>
+    fun getTrendingMovies(): Flow<PagingData<Movie>>
 }

@@ -73,10 +73,20 @@ class MovieRepositoryImpl @Inject constructor(
         return favoriteMovieDao.isFavoriteMovie(id = movie.id)
     }
 
-    override fun getTrendingMovies(): Flow<List<Movie>> {
-        return movieDao.getTrendingMovies().map {
-            it.map {
-                it.toDomainModule()
+    override fun getTrendingMovies(): Flow<PagingData<Movie>> {
+        return Pager(
+            config = PagingConfig(pageSize = 5),
+            remoteMediator = RemoteMovieMediator(
+                query = emptyMap(),
+                apiService = apiService,
+                database = database,
+                cacheTimeOut = TimeUnit.HOURS.convert(1, TimeUnit.MILLISECONDS)
+            ),
+        ) {
+            movieDao.getTrendingMovies()
+        }.flow.map { pagingData: PagingData<MovieDb> ->
+            pagingData.map { movieDb ->
+                movieDb.toDomainModule()
             }
         }
     }

@@ -66,8 +66,8 @@ abstract class MovieDao : BaseDao<MovieDb>() {
 
     @Query(
         """
-            SELECT * FROM movie ORDER BY vote_average ASC LIMIT 5
+            SELECT * FROM movie ORDER BY vote_average DESC LIMIT 5
         """
     )
-    abstract fun getTrendingMovies(): Flow<List<MovieDb>>
+    abstract fun getTrendingMovies(): PagingSource<Int, MovieDb>
 }
