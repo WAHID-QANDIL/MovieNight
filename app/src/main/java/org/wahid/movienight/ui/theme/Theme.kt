@@ -10,6 +10,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.wahid.movienight.R
 
 // For more information about custom theming visit: https://developer.android.com/develop/ui/compose/designsystems/custom
 
@@ -88,10 +89,14 @@ fun MovieNightTheme(
             medium = RoundedCornerShape(16.dp),
             small = RoundedCornerShape(8.dp)
         )
+    val icons = Icons(
+        movie = R.drawable.movie
+    )
 
     CompositionLocalProvider(
         LOCAL_COLORS provides colors,
-        LocalShapes provides  shapes,
+        LOCAL_ICONS provides icons,
+        LocalShapes provides shapes,
         LOCAL_TYPOGRAPHY provides typography,
         content = content
     )
@@ -109,4 +114,7 @@ object MovieNightTheme {
     val typography: Typography
         @Composable
         get() = LOCAL_TYPOGRAPHY.current
+    val icons: Icons
+        @Composable
+        get() = LOCAL_ICONS.current
 }
