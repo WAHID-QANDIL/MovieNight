@@ -25,8 +25,6 @@ import androidx.room.Index
 )
 data class MovieGenreDb(
 
-    @ColumnInfo(name = "movie_id")
-    val movieId: Int,
-    @ColumnInfo(name = "genre_id")
-    val genreId: Int
+    @ColumnInfo(name = "movie_id")  val movieId: Int,
+    @ColumnInfo(name = "genre_id")  val genreId: Int
 )

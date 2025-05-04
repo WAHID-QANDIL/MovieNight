@@ -12,6 +12,5 @@ import androidx.room.Index
     primaryKeys = ["movie_id" ]
 )
 data class FavoriteMovieDb(
-    @ColumnInfo(name = "movie_id")
-    val movieId: Int
+    @ColumnInfo(name = "movie_id")  val movieId: Int
 )

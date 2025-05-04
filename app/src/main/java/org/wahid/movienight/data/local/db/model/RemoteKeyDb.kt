@@ -13,8 +13,6 @@ import androidx.room.PrimaryKey
 )
 data class RemoteKeyDb(
 
-    @PrimaryKey(autoGenerate = false)
-    val query: Map<String, String>,
-    @ColumnInfo(name = "next_page")
-    val nextPage: Int = 1
+    @PrimaryKey(autoGenerate = false)   val query: Map<String, String>,
+    @ColumnInfo(name = "next_page")     val nextPage: Int = 1
 )
