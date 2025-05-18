@@ -1,12 +1,11 @@
 package org.wahid.movienight.mapper
 
-import kotlinx.datetime.Clock
-import org.wahid.movienight.data.local.db.model.MovieDb
 import org.wahid.movienight.data.remote.model.MovieModel
+import org.wahid.movienight.domain.model.Movie
 
-fun MovieModel.toDatabase(query: Map<String, String>): MovieDb{
-    return with (this){
-        MovieDb(
+fun MovieModel.toDomain(query: Map<String, String>): Movie {
+    return with(this) {
+        Movie(
             id = id,
             adult = adult,
             backdropPath = backdropPath,
@@ -20,7 +19,6 @@ fun MovieModel.toDatabase(query: Map<String, String>): MovieDb{
             video = video,
             voteAverage = voteAverage,
             voteCount = voteCount,
-            updated = Clock.System.now(),
             query = query
         )
     }
