@@ -11,7 +11,8 @@ data class Colors(
     val bottomIconColor: Color,
     val bottomIconActiveColor: Color,
     val text: Color,
-    val subText: Color
+    val subText: Color,
+    val error: Color
 )
 val LOCAL_COLORS = staticCompositionLocalOf {
     Colors(
@@ -22,6 +23,7 @@ val LOCAL_COLORS = staticCompositionLocalOf {
         bottomIconColor = Color.Unspecified,
         bottomIconActiveColor = Color.Unspecified,
         text = Color.Unspecified,
-        subText = Color.Unspecified
+        subText = Color.Unspecified,
+        error = Color.Unspecified
     )
 }
