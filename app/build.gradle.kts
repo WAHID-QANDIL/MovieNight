@@ -88,7 +88,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+//    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -112,16 +112,23 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
-    implementation(libs.retrofit.converter.kotinx.serialization)
+    implementation(libs.retrofit.kotlinx.serialization)
+//    implementation(libs.retrofit.converter.kotinx.serialization)
 
     //Material3
-    implementation(libs.material3)
-    implementation(libs.androidx.material3.window.size.class1)
-    implementation(libs.androidx.material3.adaptive.navigation.suite)
+
+    implementation(libs.androidx.compose.material3.alpha)
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
+    implementation(libs.androidx.compose.material3.window.size)
+    implementation(libs.androidx.compose.material)
+//    implementation(libs.androidx.compose.material.pullrefresh)
+    //compose pagination
+    implementation (libs.androidx.paging.compose)
+    implementation(libs.paging.runtime.ktx)
 
     //Coil
     implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.svg)
 
     //Hilt
     implementation(libs.hilt.android)

@@ -36,7 +36,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(json: Json): Retrofit {
         return retrofit {
-            baseUrl(BuildConfig.API_KEY)
+            baseUrl(BuildConfig.API_URL)
             okHttpClient {
                 connectTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
                 readTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
@@ -51,7 +51,7 @@ object NetworkModule {
                         .build()
                     addInterceptor(
                         HttpLoggingInterceptor().apply {
-                            level = HttpLoggingInterceptor.Level.BASIC
+                            level = HttpLoggingInterceptor.Level.BODY
                         }
                     )
                     chain.proceed(newRequest)

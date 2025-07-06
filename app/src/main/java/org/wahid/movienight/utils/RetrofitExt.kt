@@ -16,7 +16,7 @@ fun Retrofit.Builder.okHttpClient(init: OkHttpClient.Builder.() -> Unit): Retrof
     if (BuildConfig.DEBUG) {
         okHttpClientBuilder.addInterceptor(
             HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
+                level = HttpLoggingInterceptor.Level.BASIC
             }
         )
     }

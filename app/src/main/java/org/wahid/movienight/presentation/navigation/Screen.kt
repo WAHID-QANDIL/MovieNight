@@ -1,4 +1,4 @@
-package org.wahid.movienight.presentation
+package org.wahid.movienight.presentation.navigation
 
 import kotlinx.serialization.Serializable
 
