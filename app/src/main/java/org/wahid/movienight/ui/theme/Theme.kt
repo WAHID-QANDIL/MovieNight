@@ -26,7 +26,9 @@ fun MovieNightTheme(
         bottomIconColor = Color(0XFF67686D),
         bottomIconActiveColor = Color(0XFF0296E5),
         text = Color(0XFFFFFFFF),
-        subText = Color(0XFF67686D)
+        subText = Color(0XFF67686D),
+        error = Color(0XFF67686D)
+
     )
 
     val typography = Typography(
