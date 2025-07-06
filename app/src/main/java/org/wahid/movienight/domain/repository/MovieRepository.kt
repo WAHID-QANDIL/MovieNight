@@ -16,4 +16,6 @@ interface MovieRepository {
     suspend fun deleteFavoriteMovie(movie: Movie)
 
     fun isFavoriteMovie(movie: Movie): Flow<Boolean>
+
+    suspend fun get5THTrendingMovies(): Flow<Movie>
 }

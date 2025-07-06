@@ -7,6 +7,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import org.wahid.movienight.data.local.db.MovieDatabase
 import org.wahid.movienight.data.local.db.model.FavoriteMovieDb
@@ -56,8 +57,8 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override fun searchMovies(query: String): Flow<List<Movie>> {
-        return movieDao.searchByTitle(query = query).map {
-            listMovieDb->listMovieDb.map { movieDb-> movieDb.toDomainModule() }
+        return movieDao.searchByTitle(query = query).map { listMovieDb ->
+            listMovieDb.map { movieDb -> movieDb.toDomainModule() }
         }
     }
 
@@ -71,5 +72,11 @@ class MovieRepositoryImpl @Inject constructor(
 
     override fun isFavoriteMovie(movie: Movie): Flow<Boolean> {
         return favoriteMovieDao.isFavoriteMovie(id = movie.id)
+    }
+
+    override suspend fun get5THTrendingMovies(): Flow<Movie> {
+        val result = apiService.get5THTrendingMovies().results
+        val firstFiveMovies = result.subList(0, 5)
+        return flow { firstFiveMovies }
     }
 }

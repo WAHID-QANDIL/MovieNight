@@ -11,4 +11,7 @@ interface MovieApiService {
         @QueryMap query: Map<String, String>,
         @Query("page") page: Int
     ): RemoteMovieDto
+
+    @GET("trending/movie/day?language=en-US")
+    suspend fun get5THTrendingMovies(): RemoteMovieDto
 }
