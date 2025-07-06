@@ -2,6 +2,7 @@ package org.wahid.movienight.presentation.screen.home
 
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope.ResizeMode
@@ -27,6 +28,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -43,7 +45,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,7 +67,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.filter
 import org.wahid.movienight.R
 import org.wahid.movienight.domain.model.Movie
 import org.wahid.movienight.presentation.core.DockedSearchBarScaffold
@@ -118,7 +118,12 @@ fun HomeScreenContent(
     val animatedVisibilityScope = LocalAnimatedVisibilityScope.current
 
     val movies = uiState.movies.collectAsLazyPagingItems()
-    val trendingMovies = uiState.trendingMovies.collectAsLazyPagingItems()
+    val trendingMovies: List<Movie> = uiState.trendingMovies
+
+    Log.d("trending", "trending: ${uiState.trendingMovies}")
+    Log.d("trending", "trending: $trendingMovies")
+
+
     var currentItem by remember { mutableIntStateOf(0) }
     var backdropPath by remember { mutableStateOf("") }
 
@@ -224,18 +229,27 @@ fun HomeScreenContent(
 
             if (hasError) {
                 item(key = 3) {
-
-
+                    Text(
+                        uiState.error?:"Unknown Error",
+                        color = MovieNightTheme.colors.error
+                    )
                 }
             } else {
                 item(key = 4) {
-                    val carouselState =
-                        rememberCarouselState(
+                    if (trendingMovies.isNotEmpty()) {
+                        val carouselState = rememberCarouselState(
                             initialItem = 0,
-                            itemCount = { trendingMovies.itemCount }
+                            itemCount = {
+                                trendingMovies.size
+                            }
                         )
-                    @Suppress("INVISIBLE_MEMBER")
-//                    LaunchedEffect(carouselState.pagerState.currentPage) {
+                        @Suppress("INVISIBLE_MEMBER")
+                        LaunchedEffect(carouselState.pagerState.currentPage) {
+
+                            backdropPath =
+                                trendingMovies[carouselState.pagerState.currentPage].backdropPath
+                                    ?: ""
+
 //                        snapshotFlow { carouselState.pagerState.currentPage }
 //                            .debounce(300.milliseconds)
 //                            .collect { page ->
@@ -245,117 +259,119 @@ fun HomeScreenContent(
 //                                    }
 //                                }
 //                            }
-//                    }
-                    LaunchedEffect(carouselState.pagerState.currentPage) {
-                        snapshotFlow { carouselState.pagerState.currentPage }
-                            .filter { trendingMovies.itemSnapshotList.isNotEmpty() }
-                            .collect { page ->
-                                trendingMovies.peek(page)?.backdropPath?.let { backdropPath = it }
-                            }
-                    }
-
-
-                    HorizontalMultiBrowseCarousel(
-                        modifier = Modifier.fillMaxWidth(),
-                        state = carouselState,
-                        preferredItemWidth = 150.dp,
-                        itemSpacing = 16.dp,
-                        contentPadding = PaddingValues(horizontal = 24.dp)
-                    ) { page ->
-
-                        LaunchedEffect(true) {
-                            backdropPath = trendingMovies.peek(0)?.backdropPath ?: ""
                         }
 
-                        currentItem = page
-                        trendingMovies[page]?.let { movie ->
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Box {
-                                    MovieCard(
-                                        modifier =
-                                            Modifier
-                                                .fillMaxSize()
-                                                .aspectRatio(0.65f)
-                                                .clickable(
-                                                    interactionSource = remember { MutableInteractionSource() },
-                                                    indication = null,
-                                                    onClick =
-                                                        dropUnlessResumed {
-                                                            onClickMovie(movie, "trending")
-                                                        }
-                                                )
-                                                .maskClip(MovieNightTheme.shapes.medium)
-                                                .animateItem(),
-                                        sharedTransitionScope = sharedTransitionScope,
-                                        animatedVisibilityScope = animatedVisibilityScope,
-                                        movie = movie
-                                    )
-                                    Image(
-                                        modifier = Modifier
-                                            .align(Alignment.BottomStart)
-                                            .size(50.dp),
-                                        painter = painterResource(mostTrendingFiveMovies[currentItem]),
-                                        contentDescription = "Icon",
-                                        contentScale = ContentScale.Fit
-                                    )
-                                }
-                                Spacer(modifier = Modifier.padding(top = 8.dp))
-                                Text(
-                                    text = movie.title,
-                                    style = MovieNightTheme.typography.titleLarge,
-                                    color = MovieNightTheme.colors.text,
-                                    modifier =
-                                        Modifier
-                                            .sharedTransition(
+                        HorizontalMultiBrowseCarousel(
+                            modifier = Modifier.fillMaxWidth(),
+                            state = carouselState,
+                            preferredItemWidth = 150.dp,
+                            itemSpacing = 16.dp,
+                            contentPadding = PaddingValues(horizontal = 24.dp)
+                        ) { page ->
+                            LaunchedEffect(Unit) {
+                                backdropPath = trendingMovies[0].backdropPath ?: ""
+                            }
+
+
+                            if (page < trendingMovies.size) {
+                                currentItem = page
+                                trendingMovies[page].let { movie ->
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Box {
+                                            MovieCard(
+                                                modifier =
+                                                    Modifier
+                                                        .fillMaxSize()
+                                                        .aspectRatio(0.65f)
+                                                        .clickable(
+                                                            interactionSource = remember { MutableInteractionSource() },
+                                                            indication = null,
+                                                            onClick =
+                                                                dropUnlessResumed {
+                                                                    onClickMovie(movie, "trending")
+                                                                }
+                                                        )
+                                                        .maskClip(MovieNightTheme.shapes.medium)
+                                                        .animateItem(),
                                                 sharedTransitionScope = sharedTransitionScope,
-                                                animatedVisibilityScope = animatedVisibilityScope
-                                            ) { sharedTransitionScope, animatedVisibilityScope ->
-                                                with(sharedTransitionScope) {
-                                                    sharedBounds(
-                                                        sharedContentState =
-                                                            rememberSharedContentState(
-                                                                key =
-                                                                    SharedElementKey(
-                                                                        id = movie.id,
-                                                                        type = SharedElementType.TITLE
+                                                animatedVisibilityScope = animatedVisibilityScope,
+                                                movie = movie
+                                            )
+                                            Image(
+                                                modifier = Modifier
+                                                    .align(Alignment.BottomStart)
+                                                    .size(50.dp),
+                                                painter = painterResource(mostTrendingFiveMovies[currentItem]),
+                                                contentDescription = "Icon",
+                                                contentScale = ContentScale.Fit
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.padding(top = 8.dp))
+                                        Text(
+                                            text = movie.title,
+                                            style = MovieNightTheme.typography.titleLarge,
+                                            color = MovieNightTheme.colors.text,
+                                            modifier =
+                                                Modifier
+                                                    .sharedTransition(
+                                                        sharedTransitionScope = sharedTransitionScope,
+                                                        animatedVisibilityScope = animatedVisibilityScope
+                                                    ) { sharedTransitionScope, animatedVisibilityScope ->
+                                                        with(sharedTransitionScope) {
+                                                            sharedBounds(
+                                                                sharedContentState =
+                                                                    rememberSharedContentState(
+                                                                        key =
+                                                                            SharedElementKey(
+                                                                                id = movie.id,
+                                                                                type = SharedElementType.TITLE
+                                                                            )
+                                                                    ),
+                                                                animatedVisibilityScope = animatedVisibilityScope,
+                                                                resizeMode = ResizeMode.ScaleToBounds(),
+                                                                boundsTransform = { _, _ ->
+                                                                    tween(
+                                                                        durationMillis = 2000,
+                                                                        easing = LinearOutSlowInEasing
                                                                     )
-                                                            ),
-                                                        animatedVisibilityScope = animatedVisibilityScope,
-                                                        resizeMode = ResizeMode.ScaleToBounds(),
-                                                        boundsTransform = { _, _ ->
-                                                            tween(
-                                                                durationMillis = 2000,
-                                                                easing = LinearOutSlowInEasing
+                                                                }
                                                             )
                                                         }
-                                                    )
-                                                }
-                                                    .align(Alignment.CenterHorizontally)
-                                                    .padding(top = 4.dp)
-                                            },
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    textAlign = TextAlign.Center
-                                )
+                                                            .align(Alignment.CenterHorizontally)
+                                                            .padding(top = 4.dp)
+                                                    },
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+
+
+                                }
                             }
 
-
                         }
-
-
+                        Spacer(Modifier.height(24.dp))
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
-                    Spacer(Modifier.height(24.dp))
-
                 }
                 item(key = 5) {
                     val gridState = rememberLazyStaggeredGridState()
                     LazyVerticalStaggeredGrid(
-                        modifier = Modifier
+                        modifier = Modifier.padding(horizontal = 8.dp)
                             .heightIn(min = 100.dp, max = 600.dp),
                         state = gridState,
                         columns = StaggeredGridCells.Fixed(3),
                         reverseLayout = false,
-                        verticalItemSpacing = 16.dp,
+                        verticalItemSpacing = 24.dp,
                         horizontalArrangement = Arrangement.spacedBy(24.dp),
 
                         ) {

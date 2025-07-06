@@ -7,7 +7,7 @@ import org.wahid.movienight.domain.model.Movie
 
 data class HomeUiState(
     val movies: Flow<PagingData<Movie>> = emptyFlow(),
-    val trendingMovies: Flow<PagingData<Movie>> = emptyFlow(),
+    val trendingMovies: List<Movie> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null
 )
