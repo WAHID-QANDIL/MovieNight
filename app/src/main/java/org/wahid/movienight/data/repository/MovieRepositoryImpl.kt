@@ -1,13 +1,13 @@
 package org.wahid.movienight.data.repository
 
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import org.wahid.movienight.data.local.db.MovieDatabase
 import org.wahid.movienight.data.local.db.model.FavoriteMovieDb
@@ -16,6 +16,7 @@ import org.wahid.movienight.data.mediator.RemoteMovieMediator
 import org.wahid.movienight.data.remote.api_service.MovieApiService
 import org.wahid.movienight.domain.model.Movie
 import org.wahid.movienight.domain.repository.MovieRepository
+import org.wahid.movienight.mapper.toDomain
 import org.wahid.movienight.mapper.toDomainModule
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -74,9 +75,9 @@ class MovieRepositoryImpl @Inject constructor(
         return favoriteMovieDao.isFavoriteMovie(id = movie.id)
     }
 
-    override suspend fun get5THTrendingMovies(): Flow<Movie> {
+    override suspend fun get5THTrendingMovies(): List<Movie> {
         val result = apiService.get5THTrendingMovies().results
-        val firstFiveMovies = result.subList(0, 5)
-        return flow { firstFiveMovies }
+        Log.d("get5THTrendingMovies", "get5THTrendingMovies: $result")
+        return result.subList(0, 5).map { it.toDomain() }
     }
 }

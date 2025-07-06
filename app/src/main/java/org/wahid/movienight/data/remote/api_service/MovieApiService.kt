@@ -1,6 +1,6 @@
 package org.wahid.movienight.data.remote.api_service
 
-import org.wahid.movienight.data.remote.model.RemoteMovieDto
+import org.wahid.movienight.data.remote.model.RemoteMovieResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
@@ -10,8 +10,8 @@ interface MovieApiService {
     suspend fun getMovies(
         @QueryMap query: Map<String, String>,
         @Query("page") page: Int
-    ): RemoteMovieDto
+    ): RemoteMovieResponse
 
     @GET("trending/movie/day?language=en-US")
-    suspend fun get5THTrendingMovies(): RemoteMovieDto
+    suspend fun get5THTrendingMovies(): RemoteMovieResponse
 }
