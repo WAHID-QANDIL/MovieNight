@@ -20,7 +20,6 @@ fun MovieDb.toDomainModule(): Movie{
             video = video,
             voteAverage = voteAverage,
             voteCount = voteCount,
-            query = query
         )
     }
 }

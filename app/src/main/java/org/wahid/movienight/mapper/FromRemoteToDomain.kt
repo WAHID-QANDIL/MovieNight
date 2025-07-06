@@ -3,7 +3,7 @@ package org.wahid.movienight.mapper
 import org.wahid.movienight.data.remote.model.MovieModel
 import org.wahid.movienight.domain.model.Movie
 
-fun MovieModel.toDomain(query: Map<String, String>): Movie {
+fun MovieModel.toDomain(): Movie {
     return with(this) {
         Movie(
             id = id,
@@ -19,7 +19,6 @@ fun MovieModel.toDomain(query: Map<String, String>): Movie {
             video = video,
             voteAverage = voteAverage,
             voteCount = voteCount,
-            query = query
         )
     }
 }
