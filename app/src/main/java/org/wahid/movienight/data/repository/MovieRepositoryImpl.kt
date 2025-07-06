@@ -9,6 +9,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.wahid.movienight.BuildConfig
 import org.wahid.movienight.data.local.db.MovieDatabase
 import org.wahid.movienight.data.local.db.model.FavoriteMovieDb
 import org.wahid.movienight.data.local.db.model.MovieDb
@@ -78,6 +79,9 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun get5THTrendingMovies(): List<Movie> {
         val result = apiService.get5THTrendingMovies().results
         Log.d("get5THTrendingMovies", "get5THTrendingMovies: $result")
-        return result.subList(0, 5).map { it.toDomain() }
+        return result.subList(0, 5).map { it.toDomain().copy(
+            backdropPath = "${BuildConfig.IMAGE_URL}${it.backdropPath}",
+            posterPath = "${BuildConfig.IMAGE_URL}${it.posterPath}"
+        ) }
     }
 }

@@ -92,7 +92,10 @@ fun MovieNightTheme(
             small = RoundedCornerShape(8.dp)
         )
     val icons = Icons(
-        movie = R.drawable.movie
+        movie = R.drawable.movie,
+        search = R.drawable.baseline_search_24,
+        clear = R.drawable.clear,
+        arrowBack = R.drawable.baseline_arrow_back_24
     )
 
     CompositionLocalProvider(

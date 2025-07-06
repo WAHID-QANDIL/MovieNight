@@ -38,7 +38,7 @@ import org.wahid.movienight.ui.theme.MovieNightTheme
 @RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DockedSearchBarScaffold() {
+fun DockedSearchBarScaffold(onSearchClick: () -> Unit) {
     val textFieldState = rememberTextFieldState()
     val searchBarState = rememberSearchBarState()
     val scope = rememberCoroutineScope()
@@ -50,28 +50,37 @@ fun DockedSearchBarScaffold() {
                 modifier = Modifier,
                 searchBarState = searchBarState,
                 textFieldState = textFieldState,
-                onSearch = { scope.launch { searchBarState.animateToCollapsed() } },
+                onSearch = {
+                    scope.launch { searchBarState.animateToCollapsed()
+                    } },
                 placeholder = { Text("Search...") },
                 leadingIcon = {
                     if (searchBarState.currentValue == SearchBarValue.Expanded) {
                         IconButton(
                             onClick = { scope.launch { searchBarState.animateToCollapsed() } }
                         ) {
-                            Icon(painter = painterResource(R.drawable.baseline_arrow_back_24), contentDescription = "Back")
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_arrow_back_24),
+                                contentDescription = "Back"
+                            )
                         }
                     } else {
-                        Icon(painterResource(R.drawable.baseline_search_24), contentDescription = null)
+                        Icon(
+                            painterResource(R.drawable.baseline_search_24),
+                            contentDescription = null
+                        )
                     }
                 },
                 trailingIcon = { painterResource(R.drawable.baseline_more_vert_24) },
             )
         }
     Box(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .background(Color.Transparent),
         contentAlignment = Alignment.TopCenter,
 
-    ) {
+        ) {
         TopSearchBar(
             scrollBehavior = scrollBehavior,
             state = searchBarState,
@@ -94,6 +103,7 @@ fun DockedSearchBarScaffold() {
         }
     }
 }
+
 @Composable
 private fun SearchResults(
     onResultClick: (String) -> Unit,
@@ -105,10 +115,16 @@ private fun SearchResults(
             ListItem(
                 headlineContent = { Text(resultText) },
                 supportingContent = { Text("Additional info") },
-                leadingContent = {Icon(painterResource(R.drawable.baseline_star_24), contentDescription = null) },
+                leadingContent = {
+                    Icon(
+                        painterResource(R.drawable.baseline_star_24),
+                        contentDescription = null
+                    )
+                },
                 colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                 modifier =
-                    Modifier.clickable { onResultClick(resultText) }
+                    Modifier
+                        .clickable { onResultClick(resultText) }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 4.dp)
             )

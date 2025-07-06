@@ -10,6 +10,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -24,12 +25,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -69,7 +72,6 @@ import coil.request.ImageRequest
 import kotlinx.coroutines.FlowPreview
 import org.wahid.movienight.R
 import org.wahid.movienight.domain.model.Movie
-import org.wahid.movienight.presentation.core.DockedSearchBarScaffold
 import org.wahid.movienight.presentation.core.LocalAnimatedVisibilityScope
 import org.wahid.movienight.presentation.core.LocalSharedTransitionScope
 import org.wahid.movienight.presentation.core.MovieCard
@@ -90,8 +92,8 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreenContent(
         uiState = uiState,
-        onClickMovie = { _, _ -> },
-        onClickSearch = {}
+        onClickMovie = onClickMovie,
+        onClickSearch = onClickSearch
     )
 
 }
@@ -205,10 +207,32 @@ fun HomeScreenContent(
                 .fillMaxSize()
         )
         {
-            stickyHeader(key = 1) {
-                DockedSearchBarScaffold()
-                Spacer(modifier = Modifier.height(100.dp))
-            }
+     stickyHeader(key = 1) {
+         Box(
+             Modifier
+                 .fillMaxWidth()
+                 .statusBarsPadding()
+                 .padding(end = 16.dp, top = 8.dp)
+         ) {
+             Box(
+                 modifier = Modifier
+                     .align(Alignment.TopEnd)
+                     .size(48.dp)
+                     .clip(MovieNightTheme.shapes.medium)
+                     .background(MovieNightTheme.colors.background.copy(alpha = 0.7f))
+                     .clickable(onClick = onClickSearch),
+                 contentAlignment = Alignment.Center
+             ) {
+                 Icon(
+                     painter = painterResource(MovieNightTheme.icons.search),
+                     contentDescription = "Search Icon",
+                     modifier = Modifier.size(24.dp),
+                     tint = MovieNightTheme.colors.text
+                 )
+             }
+         }
+         Spacer(modifier = Modifier.height(100.dp))
+     }
             item(key = 2) {
                 Text(
                     text = stringResource(R.string.trending),
@@ -230,7 +254,7 @@ fun HomeScreenContent(
             if (hasError) {
                 item(key = 3) {
                     Text(
-                        uiState.error?:"Unknown Error",
+                        uiState.error ?: "Unknown Error",
                         color = MovieNightTheme.colors.error
                     )
                 }
@@ -269,9 +293,8 @@ fun HomeScreenContent(
                             contentPadding = PaddingValues(horizontal = 24.dp)
                         ) { page ->
                             LaunchedEffect(Unit) {
-                                backdropPath = trendingMovies[0].backdropPath ?: ""
+                                backdropPath = trendingMovies[page].backdropPath ?: ""
                             }
-
 
                             if (page < trendingMovies.size) {
                                 currentItem = page
@@ -366,7 +389,8 @@ fun HomeScreenContent(
                 item(key = 5) {
                     val gridState = rememberLazyStaggeredGridState()
                     LazyVerticalStaggeredGrid(
-                        modifier = Modifier.padding(horizontal = 8.dp)
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
                             .heightIn(min = 100.dp, max = 600.dp),
                         state = gridState,
                         columns = StaggeredGridCells.Fixed(3),
