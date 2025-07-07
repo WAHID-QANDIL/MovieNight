@@ -207,32 +207,32 @@ fun HomeScreenContent(
                 .fillMaxSize()
         )
         {
-     stickyHeader(key = 1) {
-         Box(
-             Modifier
-                 .fillMaxWidth()
-                 .statusBarsPadding()
-                 .padding(end = 16.dp, top = 8.dp)
-         ) {
-             Box(
-                 modifier = Modifier
-                     .align(Alignment.TopEnd)
-                     .size(48.dp)
-                     .clip(MovieNightTheme.shapes.medium)
-                     .background(MovieNightTheme.colors.background.copy(alpha = 0.7f))
-                     .clickable(onClick = onClickSearch),
-                 contentAlignment = Alignment.Center
-             ) {
-                 Icon(
-                     painter = painterResource(MovieNightTheme.icons.search),
-                     contentDescription = "Search Icon",
-                     modifier = Modifier.size(24.dp),
-                     tint = MovieNightTheme.colors.text
-                 )
-             }
-         }
-         Spacer(modifier = Modifier.height(100.dp))
-     }
+            stickyHeader(key = 1) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .statusBarsPadding()
+                        .padding(end = 16.dp, top = 8.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .size(48.dp)
+                            .clip(MovieNightTheme.shapes.medium)
+                            .background(MovieNightTheme.colors.background.copy(alpha = 0.7f))
+                            .clickable(onClick = onClickSearch),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(MovieNightTheme.icons.search),
+                            contentDescription = "Search Icon",
+                            modifier = Modifier.size(24.dp),
+                            tint = MovieNightTheme.colors.text
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(100.dp))
+            }
             item(key = 2) {
                 Text(
                     text = stringResource(R.string.trending),
@@ -329,7 +329,7 @@ fun HomeScreenContent(
                                                 contentScale = ContentScale.Fit
                                             )
                                         }
-                                        Spacer(modifier = Modifier.padding(top = 8.dp))
+                                        Spacer(modifier = Modifier.padding(vertical = 10.dp))
                                         Text(
                                             text = movie.title,
                                             style = MovieNightTheme.typography.titleLarge,
