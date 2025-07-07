@@ -91,6 +91,7 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreenContent(
+        modifier = modifier,
         uiState = uiState,
         onClickMovie = onClickMovie,
         onClickSearch = onClickSearch
@@ -405,25 +406,29 @@ fun HomeScreenContent(
                         ) { index ->
                             val movie = movies[index]
                             movie?.let {
-                                MovieCard(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .aspectRatio(0.65f)
-                                        .clickable {
-                                            onClickMovie(movie, "Movies")
-                                        }
-                                        .clip(MovieNightTheme.shapes.medium)
-                                        .animateItem(),
-                                    sharedTransitionScope = sharedTransitionScope,
-                                    animatedVisibilityScope = animatedVisibilityScope,
-                                    movie = movie
-                                )
-                                Text(
-                                    text = movie.title,
-                                    style = MovieNightTheme.typography.titleLarge,
-                                    color = MovieNightTheme.colors.text,
-                                    modifier =
-                                        Modifier
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    MovieCard(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .aspectRatio(0.65f)
+                                            .clickable {
+                                                onClickMovie(movie, "Movies")
+                                            }
+                                            .clip(MovieNightTheme.shapes.medium)
+                                            .animateItem(),
+                                        sharedTransitionScope = sharedTransitionScope,
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        movie = movie
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Text(
+                                        text = movie.title,
+                                        style = MovieNightTheme.typography.titleLarge,
+                                        color = MovieNightTheme.colors.text,
+                                        modifier = Modifier
                                             .sharedTransition(
                                                 sharedTransitionScope = sharedTransitionScope,
                                                 animatedVisibilityScope = animatedVisibilityScope
@@ -450,10 +455,11 @@ fun HomeScreenContent(
                                                 }
                                                     .padding(top = 4.dp)
                                             },
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    textAlign = TextAlign.Center
-                                )
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
                             }
 
                         }
