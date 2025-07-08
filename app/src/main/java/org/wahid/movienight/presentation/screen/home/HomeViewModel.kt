@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.wahid.movienight.domain.model.Movie
@@ -18,7 +19,8 @@ class HomeViewModel @Inject constructor(
 
     ) : ViewModel() {
 
-    val uiState = MutableStateFlow(HomeUiState())
+    private val _uiState = MutableStateFlow(HomeUiState())
+    val uiState = _uiState.asStateFlow()
 
     private val movies =
         getMoviesUseCase(emptyMap())
@@ -28,14 +30,14 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 var trendingMovies: List<Movie> = fiveTrendingMoviesUseCase()
-                uiState.update {
+                _uiState.update {
                     it.copy(
                         movies = movies,
                         trendingMovies = trendingMovies
                     )
                 }
             } catch (e: Exception) {
-                uiState.update {
+                _uiState.update {
                     it.copy(
                         error = e.message
                     )
